@@ -514,6 +514,10 @@ bool StatefulReader::processDataMsg(
             if (!mp_history->can_change_be_added_nts(change->writerGUID, change->serializedPayload.length,
                     unknown_missing_changes_up_to, will_never_be_accepted))
             {
+                if (getListener())
+                {
+                    getListener()->on_sample_rejected((RTPSReader*)this, change);
+                }
                 if (will_never_be_accepted && pWP)
                 {
                     pWP->irrelevant_change_set(change->sequenceNumber);
@@ -635,6 +639,10 @@ bool StatefulReader::processDataFragMsg(
             if (!mp_history->can_change_be_added_nts(incomingChange->writerGUID, sampleSize, changes_up_to,
                     will_never_be_accepted))
             {
+                if (getListener() && 1 == fragmentStartingNum)
+                {
+                    getListener()->on_sample_rejected((RTPSReader*)this, incomingChange);
+                }
                 if (will_never_be_accepted)
                 {
                     pWP->irrelevant_change_set(incomingChange->sequenceNumber);

@@ -709,6 +709,7 @@ bool StatefulReader::processDataFragMsg(
                 }
                 else
                 {
+                    bool has_to_notify = false;
                     if (fastdds::dds::NOT_REJECTED != rejection_reason)
                     {
                         if (getListener())
@@ -721,6 +722,7 @@ bool StatefulReader::processDataFragMsg(
                         if (fastdds::dds::REJECTED_BY_INSTANCES_LIMIT == rejection_reason)
                         {
                             pWP->irrelevant_change_set(work_change->sequenceNumber);
+                            has_to_notify = true;
                         }
                     }
 
@@ -732,6 +734,11 @@ bool StatefulReader::processDataFragMsg(
                     else
                     {
                         logError(RTPS_READER, "Change should exist but didn't find it");
+                    }
+
+                    if (has_to_notify)
+                    {
+                        NotifyChanges(pWP);
                     }
                 }
             }
@@ -1061,6 +1068,7 @@ bool StatefulReader::change_received(
             if (fastdds::dds::REJECTED_BY_INSTANCES_LIMIT == rejection_reason)
             {
                 prox->irrelevant_change_set(a_change->sequenceNumber);
+                NotifyChanges(prox);
             }
         }
     }

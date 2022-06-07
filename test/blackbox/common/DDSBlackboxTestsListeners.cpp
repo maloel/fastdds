@@ -2009,10 +2009,8 @@ TEST(DDSStatus, sample_rejected_key_large_re_dw_re_dr_keep_last_max_samples_2)
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyeddata300kb_data_generator(10);
-    auto instance_1 = writer.register_instance(*data.begin());
-    auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_1, instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2289,10 +2287,8 @@ TEST(DDSStatus, sample_rejected_key_re_dw_re_dr_keep_last_max_samples_per_instan
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyedhelloworld_data_generator(10);
-    auto instance_1 = writer.register_instance(*data.begin());
-    auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_1, instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2374,10 +2370,8 @@ TEST(DDSStatus, sample_rejected_key_large_re_dw_re_dr_keep_last_max_samples_per_
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyeddata300kb_data_generator(10);
-    auto instance_1 = writer.register_instance(*data.begin());
-    auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_1, instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2453,10 +2447,9 @@ TEST(DDSStatus, sample_rejected_key_re_dw_re_dr_keep_all_max_instances_1)
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyedhelloworld_data_generator(9);
-    auto instance_1 = writer.register_instance(*data.begin());
     auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, &instance_1, &instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_2](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2464,6 +2457,7 @@ TEST(DDSStatus, sample_rejected_key_re_dw_re_dr_keep_all_max_instances_1)
                 test_status.total_count_change += status.total_count_change;
                 ASSERT_EQ(eprosima::fastdds::dds::REJECTED_BY_INSTANCES_LIMIT, status.last_reason);
                 test_status.last_reason = status.last_reason;
+                ASSERT_EQ(instance_2, status.last_instance_handle);
                 test_status.last_instance_handle = status.last_instance_handle;
             });
 
@@ -2546,10 +2540,9 @@ TEST(DDSStatus, sample_rejected_key_large_re_dw_re_dr_keep_all_max_instances_1)
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyeddata300kb_data_generator(9);
-    auto instance_1 = writer.register_instance(*data.begin());
     auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_1, instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_2](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2558,6 +2551,7 @@ TEST(DDSStatus, sample_rejected_key_large_re_dw_re_dr_keep_all_max_instances_1)
                 test_status.last_instance_handle = status.last_instance_handle;
                 ASSERT_EQ(eprosima::fastdds::dds::REJECTED_BY_INSTANCES_LIMIT, status.last_reason);
                 test_status.last_reason = status.last_reason;
+                ASSERT_EQ(instance_2, status.last_instance_handle);
                 test_status.last_instance_handle = status.last_instance_handle;
             });
 
@@ -2634,10 +2628,9 @@ TEST(DDSStatus, sample_rejected_key_re_dw_re_dr_keep_last_max_instances_1)
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyedhelloworld_data_generator(9);
-    auto instance_1 = writer.register_instance(*data.begin());
     auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_1, instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_2](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2646,6 +2639,7 @@ TEST(DDSStatus, sample_rejected_key_re_dw_re_dr_keep_last_max_instances_1)
                 test_status.last_instance_handle = status.last_instance_handle;
                 ASSERT_EQ(eprosima::fastdds::dds::REJECTED_BY_INSTANCES_LIMIT, status.last_reason);
                 test_status.last_reason = status.last_reason;
+                ASSERT_EQ(instance_2, status.last_instance_handle);
                 test_status.last_instance_handle = status.last_instance_handle;
             });
 
@@ -2727,10 +2721,9 @@ TEST(DDSStatus, sample_rejected_key_large_re_dw_re_dr_keep_last_max_instances_1)
     sample_rejected_test_dw_init(writer);
 
     auto data = default_keyeddata300kb_data_generator(9);
-    auto instance_1 = writer.register_instance(*data.begin());
     auto instance_2 = writer.register_instance(*std::next(data.begin()));
 
-    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_1, instance_2](
+    sample_rejected_test_dr_init(reader, [&test_mtx, &test_status, instance_2](
                 const eprosima::fastdds::dds::SampleRejectedStatus& status)
             {
                 std::unique_lock<std::mutex> lock(test_mtx);
@@ -2739,6 +2732,7 @@ TEST(DDSStatus, sample_rejected_key_large_re_dw_re_dr_keep_last_max_instances_1)
                 test_status.last_instance_handle = status.last_instance_handle;
                 ASSERT_EQ(eprosima::fastdds::dds::REJECTED_BY_INSTANCES_LIMIT, status.last_reason);
                 test_status.last_reason = status.last_reason;
+                ASSERT_EQ(instance_2, status.last_instance_handle);
                 test_status.last_instance_handle = status.last_instance_handle;
             });
 

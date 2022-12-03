@@ -390,14 +390,14 @@ find_package(Atomic MODULE)
 # prioritizes writes
 
 # try_run cannot manage targets yet
-get_target_property(CMAKE_ATOMIC_LIB eProsima_atomic INTERFACE_LINK_LIBRARIES)    
+get_target_property(CMAKE_ATOMIC_LIB eProsima_atomic INTERFACE_LINK_LIBRARIES)
 if(NOT CMAKE_ATOMIC_LIB)
     set(CMAKE_ATOMIC_LIB)
 endif()
 
 try_run(SM_RUN_RESULT SM_COMPILE_RESULT
         "${CMAKE_CURRENT_BINARY_DIR}/shmtest"
-        "${CMAKE_SOURCE_DIR}/cmake/modules/check_shared_mutex_priority.cpp"
+        "${CMAKE_MODULE_PATH}/check_shared_mutex_priority.cpp"
         LINK_LIBRARIES ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_ATOMIC_LIB}
         RUN_OUTPUT_VARIABLE SM_RUN_OUTPUT)
 
@@ -508,7 +508,7 @@ if(MSVC OR MSVC_IDE)
         endif()
 
         # Get OpenSSL version suitable manifest format
-        execute_process( COMMAND PowerShell -NoLogo -Command "&{ param([string]$original) 
+        execute_process( COMMAND PowerShell -NoLogo -Command "&{ param([string]$original)
         if ($original -notmatch '\\d+$')
             { $res = $original.Substring(0,$original.length-1) + '.' +
             ([int]$original[$original.length-1]-[int][char]'a'+1); }

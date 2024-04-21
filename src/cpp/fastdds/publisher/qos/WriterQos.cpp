@@ -150,6 +150,11 @@ void WriterQos::setQos(
         data_sharing = qos.data_sharing;
         data_sharing.hasChanged = true;
     }
+    if( first_time || ! ( m_publishMode == qos.m_publishMode ) )
+    {
+        m_publishMode = qos.m_publishMode;
+        m_publishMode.hasChanged = true;
+    }
 }
 
 bool WriterQos::checkQos() const

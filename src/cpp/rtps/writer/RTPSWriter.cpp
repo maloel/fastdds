@@ -303,7 +303,7 @@ constexpr uint32_t heartbeat_message_length = 32;
 uint32_t RTPSWriter::getMaxDataSize()
 {
     uint32_t flow_max = flow_controller_->get_max_payload();
-    uint32_t part_max = mp_RTPSParticipant->getMaxMessageSize();
+    uint32_t part_max = 1470; // mp_RTPSParticipant->getMaxMessageSize();
     uint32_t max_size = flow_max > part_max ? part_max : flow_max;
 
     max_size =  calculateMaxDataSize(max_size);
